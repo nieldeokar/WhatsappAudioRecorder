@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="52dp"
+    android:id="@+id/rlEditor">
+
+    <ImageButton
+        android:id="@+id/btn_emoji"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentStart="true"
+        android:layout_centerInParent="true"
+        android:background="?android:selectableItemBackground"
+        app:srcCompat="@drawable/ic_insert_emoticon_24dp"
+        tools:ignore="ContentDescription" />
+
+    <com.nieldeokar.whatsappaudiorecorder.EditMessage
+        android:id="@+id/edit_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/btn_emoji"
+        android:layout_toStartOf="@+id/btn_attach"
+        android:ems="10"
+        android:hint="Send a message"
+        tools:text="Hellow"
+        android:background="@android:color/transparent"
+        android:imeOptions="flagNoExtractUi|actionSend"
+        android:inputType="textMultiLine|textCapSentences|textShortMessage"
+        android:maxLength="2000"
+        android:maxLines="5"
+        app:emojiSize="25sp"
+        android:minHeight="48dp"
+        android:paddingBottom="12dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingTop="12dp"
+        android:scrollHorizontally="false"
+        android:scrollbars="vertical">
+        <requestFocus />
+    </com.nieldeokar.whatsappaudiorecorder.EditMessage>
+
+    <ImageButton
+        android:id="@+id/btn_attach"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="?android:selectableItemBackground"
+        app:srcCompat="@drawable/ic_attach_file_24dp"
+        tools:ignore="ContentDescription"
+        android:foregroundGravity="bottom"
+        android:layout_centerInParent="true"
+        android:layout_alignParentEnd="true"/>
+
+    <com.nieldeokar.whatsappaudiorecorder.recorder.RecordView
+        android:id="@+id/record_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="48dp"
+        android:visibility="gone"
+        android:background ="@color/white"
+        app:slide_to_cancel_arrow="@drawable/ic_keyboard_arrow_left"
+        app:slide_to_cancel_margin_right="10dp"
+        app:slide_to_cancel_text="Slide To Cancel" />
+
+   <!-- <com.devlomi.record_view.RecordButton
+        android:id="@+id/btn_send"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        app:srcCompat="@drawable/ic_send_24dp"
+        android:src="@drawable/ic_mic_black_24dp"
+        tools:ignore="ContentDescription"
+        android:layout_alignParentEnd="true"
+        android:scaleType="centerInside" />-->
+
+</RelativeLayout>
