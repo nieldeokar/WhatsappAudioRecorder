@@ -28,6 +28,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.nieldeokar.whatsappaudiorecorder.R;
+
 import java.io.File;
 import java.io.IOException;
 

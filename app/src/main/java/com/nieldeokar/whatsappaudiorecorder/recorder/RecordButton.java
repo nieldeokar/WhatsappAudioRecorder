@@ -94,7 +94,7 @@ public class RecordButton extends android.support.v7.widget.AppCompatImageView i
     public synchronized boolean onTouch(View v, MotionEvent event) {
         if (isListenForRecord()) {
 
-            if(!hasVoicePermissionViaAudioMSG()){
+            if(!hasVoicePermission()){
                 onRecordClickListener.askForVoicePermission();
                 return false;
             }
@@ -165,7 +165,7 @@ public class RecordButton extends android.support.v7.widget.AppCompatImageView i
             onRecordClickListener.onClick(v);
     }
 
-    private boolean hasVoicePermissionViaAudioMSG() {
+    private boolean hasVoicePermission() {
         return Build.VERSION.SDK_INT < Build.VERSION_CODES.M || context.checkSelfPermission(Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED;
     }
 

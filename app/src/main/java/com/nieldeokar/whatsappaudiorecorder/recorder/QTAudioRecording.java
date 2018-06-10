@@ -16,6 +16,7 @@ public class QTAudioRecording {
     private long mStartingTimeMillis = 0;
     private static final int IO_ERROR = 1;
     private static final int RECORDER_ERROR = 2;
+    public static final int FILE_NULL = 3;
 
     private Thread mRecordingThread;
 
@@ -31,7 +32,10 @@ public class QTAudioRecording {
     }
 
     public synchronized void startRecording() {
-
+        if(file == null) {
+            onAudioRecordListener.onError(FILE_NULL );
+            return;
+        }
         mStartingTimeMillis = System.currentTimeMillis();
         try {
             if(mRecordingThread != null) stopRecording(true);

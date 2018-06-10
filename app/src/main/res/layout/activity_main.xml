@@ -8,6 +8,12 @@
     tools:context=".MainActivity">
 
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/edit_box"
+        />
 
     <RelativeLayout
         android:id="@+id/edit_box"
@@ -15,7 +21,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_toLeftOf="@id/btn_send"
-        tools:ignore="UselessParent">
+        tools:ignore="UselessParent"
+        android:background="#F5F5F5"
+        >
 
         <include
             layout="@layout/editor"
@@ -33,6 +41,8 @@
         android:scaleType="centerInside"
         android:src="@drawable/ic_mic_black_24dp"
         app:srcCompat="@drawable/ic_send_24dp"
-        tools:ignore="ContentDescription" />
+        tools:ignore="ContentDescription"
+        android:background="#F5F5F5"
+        />
 
 </RelativeLayout>
