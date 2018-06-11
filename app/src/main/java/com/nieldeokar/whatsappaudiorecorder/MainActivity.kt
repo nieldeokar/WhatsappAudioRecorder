@@ -29,19 +29,19 @@ class MainActivity : AppCompatActivity(), OnRecordClickListener, EditMessage.Key
         const val TAG = "MAIN"
     }
 
-    lateinit var mAdapter : AudioFilesAdapter
+    lateinit var mAdapter: AudioFilesAdapter
     private var mRecordingItemsList = ArrayList<RecordingItem>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        if(hasExternalReadWritePermission()){
+        if (hasExternalReadWritePermission()) {
             val external = File(getExternalStorageDirectory(), "Recorder")
             if (!external.exists()) external.mkdir()
 
             record_view.setAudioDirectory(external)
-        }else{
+        } else {
             askForStoragePermission()
         }
 
@@ -51,8 +51,8 @@ class MainActivity : AppCompatActivity(), OnRecordClickListener, EditMessage.Key
         record_view.setOnRecordListener(object : OnAudioRecordListener {
             override fun onRecordFinished(recordingItem: RecordingItem?) {
                 runOnUiThread {
-//                    showToast( "Recording finished ")
-                    Log.d(TAG,"Recording finished filePath : ${recordingItem?.filePath}" +
+                    //                    showToast( "Recording finished ")
+                    Log.d(TAG, "Recording finished filePath : ${recordingItem?.filePath}" +
                             "\n fileLength %${recordingItem?.length}")
                     mAdapter.addItem(recordingItem)
                 }
@@ -60,28 +60,28 @@ class MainActivity : AppCompatActivity(), OnRecordClickListener, EditMessage.Key
 
             override fun onError(errorCode: Int) {
                 record_view.recordTimerStop()
-                if(errorCode == AudioRecording.FILE_NULL){
+                if (errorCode == AudioRecording.FILE_NULL) {
                     runOnUiThread {
                         record_view.stopRecordingnResetViews(btn_send)
                         showToast("Destination filePath is null ")
-                        Log.d(TAG,"Recording error filepath is null")
+                        Log.d(TAG, "Recording error filepath is null")
                     }
                 }
 
-                Log.d(TAG,"Recording error code $errorCode")
+                Log.d(TAG, "Recording error code $errorCode")
 
             }
 
             override fun onRecordingStarted() {
                 runOnUiThread {
-                    Log.d(TAG,"Recording started")
+                    Log.d(TAG, "Recording started")
                     record_view.recordTimerStart()
                 }
             }
         })
 
         edit_message.setKeyboardListener(this)
-        mAdapter = AudioFilesAdapter(mRecordingItemsList,this)
+        mAdapter = AudioFilesAdapter(mRecordingItemsList, this)
         val linearLayoutManager = LinearLayoutManager(this)
         recyclerView.layoutManager = linearLayoutManager
         recyclerView.adapter = mAdapter
@@ -89,9 +89,8 @@ class MainActivity : AppCompatActivity(), OnRecordClickListener, EditMessage.Key
     }
 
 
-
     override fun onTypingStarted() {
-        if(record_view.isRecordingStarted){
+        if (record_view.isRecordingStarted) {
             edit_message.setText("")
             return
         }
@@ -104,7 +103,7 @@ class MainActivity : AppCompatActivity(), OnRecordClickListener, EditMessage.Key
 
     override fun onStop() {
         super.onStop()
-        if(record_view.isRecordingStarted) record_view.stopRecordingnResetViews(btn_send)
+        if (record_view.isRecordingStarted) record_view.stopRecordingnResetViews(btn_send)
     }
 
     override fun onClick(v: View?) {
@@ -116,34 +115,34 @@ class MainActivity : AppCompatActivity(), OnRecordClickListener, EditMessage.Key
     }
 
     private fun askForStoragePermission() {
-        if(!hasExternalReadWritePermission()) {
+        if (!hasExternalReadWritePermission()) {
             ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
                     android.Manifest.permission.READ_EXTERNAL_STORAGE), STORAGE_PERMISSION_REQUEST_CODE)
         }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            when (requestCode) {
 
-                STORAGE_PERMISSION_REQUEST_CODE -> {
-                    val external = File(getExternalStorageDirectory(), "Recorder")
-                    if (!external.exists()) external.mkdir()
+        if (requestCode == STORAGE_PERMISSION_REQUEST_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                val external = File(getExternalStorageDirectory(), "Recorder")
+                if (!external.exists()) external.mkdir()
 
-                    record_view.setAudioDirectory(external)
-
-
-                }
-                else -> super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+                record_view.setAudioDirectory(external)
+            } else {
+                showToast("Please grant external storage permission to save recorded file")
             }
-        }else{
-            showToast("Please grant permission")
-            super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        } else if (requestCode == VOICE_PERMISSION_REQUEST_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                showToast("Please grant permission of mic")
+            }else{
+                Log.d(TAG,"Voice permission granted")
+            }
         }
     }
 
     private fun showToast(msg: String) {
-        Toast.makeText(this,msg,Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
     }
 
     override fun onTextDeleted() {
