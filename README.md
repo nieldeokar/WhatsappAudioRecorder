@@ -18,10 +18,13 @@ would understand.
 
 
 
-<a href="url"><img src="https://github.com/nieldeokar/WhatsappAudioRecorder/blob/master/images/recorder_1.png" align="left" height="800" width="500" ></a>
-<a href="url"><img src="https://github.com/nieldeokar/WhatsappAudioRecorder/blob/master/images/recorder_2.png" align="left" height="800" width="500" ></a>
-<a href="url"><img src="https://github.com/nieldeokar/WhatsappAudioRecorder/blob/master/images/recorder_3.png" align="left" height="800" width="500" ></a>
-<a href="url"><img src="https://github.com/nieldeokar/WhatsappAudioRecorder/blob/master/images/recorder_4.png" align="left" height="800" width="500" ></a>
+<a href="url"><img src="https://github.com/nieldeokar/WhatsappAudioRecorder/blob/master/images/recorder_1.png" align="left" height="600" width="350" ></a>
+
+<a href="url"><img src="https://github.com/nieldeokar/WhatsappAudioRecorder/blob/master/images/recorder_2.png" align="right" height="600" width="350" ></a>
+
+<a href="url"><img src="https://github.com/nieldeokar/WhatsappAudioRecorder/blob/master/images/recorder_3.png" align="left" height="600" width="350" ></a>
+
+<a href="url"><img src="https://github.com/nieldeokar/WhatsappAudioRecorder/blob/master/images/recorder_4.png" align="right" height="600" width="350" ></a>
 
 
 [1]: https://github.com/3llomi/RecordView
