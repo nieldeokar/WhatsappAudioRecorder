@@ -17,7 +17,7 @@ PCM data and we can compare the expected recorded bytes and recorded audio bytes
 
 ## Preview
 <p align="center">
-  <img src="images/whatsapp_audio_record_demo.gif" height="500" alt="demo gif" />
+  <img src="preview/whatsapp_audio_record_demo.gif" height="500" alt="demo gif" />
 </p>
 
 #### Libraries used
