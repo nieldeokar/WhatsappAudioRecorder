@@ -13,7 +13,7 @@ PCM data and we can compare the expected recorded bytes and recorded audio bytes
 [3]: https://github.com/3llomi/RecordView
 
 #### Pending work :
-1. Mic should fly up and then come down inside basket
+1. On cancel Mic should fly up and then come down inside bucket.
 
 ## Preview
 <p align="center">
