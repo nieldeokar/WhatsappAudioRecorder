@@ -16,7 +16,9 @@ import kotlinx.android.synthetic.main.editor.*
 import java.io.File
 import android.content.pm.PackageManager
 import android.os.Build
+import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
+import com.nieldeokar.whatsappaudiorecorder.DividerItemDecoration.VERTICAL_LIST
 import com.nieldeokar.whatsappaudiorecorder.recorder.QTAudioRecording
 
 
@@ -28,13 +30,15 @@ class MainActivity : AppCompatActivity(), OnRecordClickListener, EditMessage.Key
         const val TAG = "MAIN"
     }
 
+    lateinit var mAdapter : AudioFilesAdapter
+    private var mRecordingItemsList = ArrayList<RecordingItem>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         if(hasExternalReadWritePermission()){
-            val external = File(getExternalStorageDirectory(), "RecorderM")
+            val external = File(getExternalStorageDirectory(), "Recorder")
             if (!external.exists()) external.mkdir()
 
             record_view.setAudioDirectory(external)
@@ -51,6 +55,7 @@ class MainActivity : AppCompatActivity(), OnRecordClickListener, EditMessage.Key
 //                    showToast( "Recording finished ")
                     Log.d(TAG,"Recording finished filePath : ${recordingItem?.filePath}" +
                             "\n fileLength %${recordingItem?.length}")
+                    mAdapter.addItem(recordingItem)
                 }
             }
 
@@ -77,6 +82,11 @@ class MainActivity : AppCompatActivity(), OnRecordClickListener, EditMessage.Key
         })
 
         edit_message.setKeyboardListener(this)
+        mAdapter = AudioFilesAdapter(mRecordingItemsList,this)
+        val linearLayoutManager = LinearLayoutManager(this)
+        recyclerView.layoutManager = linearLayoutManager
+        recyclerView.adapter = mAdapter
+        recyclerView.addItemDecoration(DividerItemDecoration(this, VERTICAL_LIST))
     }
 
 
@@ -160,5 +170,10 @@ class MainActivity : AppCompatActivity(), OnRecordClickListener, EditMessage.Key
         return Build.VERSION.SDK_INT < Build.VERSION_CODES.M
                 || checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
                 || checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mAdapter.stopPlayer()
     }
 }
