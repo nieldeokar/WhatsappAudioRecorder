@@ -1,25 +1,24 @@
 package com.nieldeokar.whatsappaudiorecorder
 
-import android.net.Uri
-import android.support.v7.app.AppCompatActivity
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
-import android.view.View
-import com.nieldeokar.whatsappaudiorecorder.recorder.OnRecordClickListener
-import kotlinx.android.synthetic.main.activity_main.*
 import android.os.Environment.getExternalStorageDirectory
 import android.os.Handler
 import android.support.v4.app.ActivityCompat
-import android.widget.Toast
-import com.nieldeokar.whatsappaudiorecorder.recorder.OnAudioRecordListener
-import com.nieldeokar.whatsappaudiorecorder.recorder.RecordingItem
-import kotlinx.android.synthetic.main.editor.*
-import java.io.File
-import android.content.pm.PackageManager
-import android.os.Build
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
+import android.view.View
+import android.widget.Toast
 import com.nieldeokar.whatsappaudiorecorder.DividerItemDecoration.VERTICAL_LIST
+import com.nieldeokar.whatsappaudiorecorder.recorder.OnAudioRecordListener
+import com.nieldeokar.whatsappaudiorecorder.recorder.OnRecordClickListener
 import com.nieldeokar.whatsappaudiorecorder.recorder.QTAudioRecording
+import com.nieldeokar.whatsappaudiorecorder.recorder.RecordingItem
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.editor.*
+import java.io.File
 
 
 class MainActivity : AppCompatActivity(), OnRecordClickListener, EditMessage.KeyboardListener {
@@ -128,7 +127,7 @@ class MainActivity : AppCompatActivity(), OnRecordClickListener, EditMessage.Key
             when (requestCode) {
 
                 STORAGE_PERMISSION_REQUEST_CODE -> {
-                    val external = File(getExternalStorageDirectory(), "RecorderM")
+                    val external = File(getExternalStorageDirectory(), "Recorder")
                     if (!external.exists()) external.mkdir()
 
                     record_view.setAudioDirectory(external)
@@ -147,23 +146,8 @@ class MainActivity : AppCompatActivity(), OnRecordClickListener, EditMessage.Key
         Toast.makeText(this,msg,Toast.LENGTH_SHORT).show()
     }
 
-    override fun onEnterPressed(): Boolean {
-        return false
-    }
-
     override fun onTextDeleted() {
         btn_send.changeToMessage(false)
-    }
-
-    override fun textLengthChanged(length: Int) {
-
-    }
-
-    override fun onTabPressed(repeated: Boolean): Boolean {
-        return false
-    }
-
-    override fun sendKeyboardRichContent(uri: Uri?) {
     }
 
     private fun hasExternalReadWritePermission(): Boolean {

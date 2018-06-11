@@ -14,8 +14,8 @@ import java.io.OutputStream;
 import java.nio.ByteBuffer;
 
 public class AudioRecordThread implements Runnable {
-    private static final String TAG = AudioRecordThread.class.getSimpleName();
 
+    private static final String TAG = AudioRecordThread.class.getSimpleName();
 
     private static final int SAMPLE_RATE = 44100;
     private static final int SAMPLE_RATE_INDEX = 4;
@@ -56,17 +56,15 @@ public class AudioRecordThread implements Runnable {
             onRecorderFailedListener.onRecorderStarted();
         }
         MediaCodec.BufferInfo bufferInfo = new MediaCodec.BufferInfo();
-//        byte[]                audioRecordData    = new byte[bufferSize];
         ByteBuffer[] codecInputBuffers = mediaCodec.getInputBuffers();
         ByteBuffer[] codecOutputBuffers = mediaCodec.getOutputBuffers();
 
         try {
             while (!Thread.interrupted()) {
 
-//          handleCodecInput(audioRecord, audioRecordData, mediaCodec, codecInputBuffers, running);
-            boolean success = handleCodecInput(audioRecord, mediaCodec, codecInputBuffers, Thread.currentThread().isAlive());
-            if (success)
-                handleCodecOutput(mediaCodec, codecOutputBuffers, bufferInfo, outputStream);
+                boolean success = handleCodecInput(audioRecord, mediaCodec, codecInputBuffers, Thread.currentThread().isAlive());
+                if (success)
+                    handleCodecOutput(mediaCodec, codecOutputBuffers, bufferInfo, outputStream);
             }
         } catch (IOException e) {
             Log.w(TAG, e);
@@ -98,14 +96,12 @@ public class AudioRecordThread implements Runnable {
 
             if (length != bufferSize) {
                 if (onRecorderFailedListener != null) {
-                    Log.d(TAG, "length != BufferSize calling onRecordFailedxx");
+                    Log.d(TAG, "length != BufferSize calling onRecordFailed");
                     onRecorderFailedListener.onRecorderFailed();
                 }
                 return false;
             }
         }
-
-//        Log.d(TAG, "Recording on  "+Thread.currentThread().getId() + " length "+ length);
 
         int codecInputBufferIndex = mediaCodec.dequeueInputBuffer(10 * 1000);
 
@@ -179,7 +175,7 @@ public class AudioRecordThread implements Runnable {
                 AudioFormat.ENCODING_PCM_16BIT, bufferSize * 10);
 
         if (audioRecord.getState() != AudioRecord.STATE_INITIALIZED) {
-            Log.d(TAG, "Unable to initialze AudioRecord");
+            Log.d(TAG, "Unable to initialize AudioRecord");
             throw new RuntimeException("Unable to initialize AudioRecord");
         }
 

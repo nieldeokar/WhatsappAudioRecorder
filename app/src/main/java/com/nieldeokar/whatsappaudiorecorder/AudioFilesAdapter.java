@@ -8,7 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -51,9 +51,9 @@ public class AudioFilesAdapter extends RecyclerView.Adapter<AudioFilesAdapter.My
     public void onBindViewHolder(MyViewHolder holder, int position) {
         RecordingItem recordingItem = mRecordingItems.get(position);
 
-        holder.tvTotalPlayTime.setText(Utils.parseTime(recordingItem.getLength()));
         holder.imgPlayPause.setImageResource(R.drawable.ic_play_circle_filled_black_24dp);
-
+        holder.tvPlayTime.setText(Utils.parseTime(recordingItem.getLength()));
+        holder.tvFilePath.setText(recordingItem.getFilePath());
         if (position == mPlayingPosition) {
             mAudioPlayingHolder = holder;
             updatePlayingView();
@@ -70,9 +70,7 @@ public class AudioFilesAdapter extends RecyclerView.Adapter<AudioFilesAdapter.My
 
     private void updatePlayingView() {
         if (mediaPlayer == null || mAudioPlayingHolder == null) return;
-        //mAudioPlayingHolder.audioSeekBar.setMax(mediaPlayer.getDuration());
         mAudioPlayingHolder.audioSeekBar.setProgress(mediaPlayer.getCurrentPosition() * 100 / mediaPlayer.getDuration());
-        //mAudioPlayingHolder.audioSeekBar.setEnabled(true);
 
         if (mediaPlayer.isPlaying()) {
             uiUpdateHandler.sendEmptyMessageDelayed(MSG_UPDATE_SEEK_BAR, 100);
@@ -80,7 +78,6 @@ public class AudioFilesAdapter extends RecyclerView.Adapter<AudioFilesAdapter.My
 
         } else {
             uiUpdateHandler.removeMessages(MSG_UPDATE_SEEK_BAR);
-            mAudioPlayingHolder.tvTotalPlayTime.setText(Utils.parseTime(0L));
             mAudioPlayingHolder.imgPlayPause.setImageResource(R.drawable.ic_play_circle_filled_black_24dp);
         }
         mAudioPlayingHolder.tvPlayTime.setText(Utils.parseTime(mediaPlayer.getCurrentPosition()));
@@ -136,7 +133,7 @@ public class AudioFilesAdapter extends RecyclerView.Adapter<AudioFilesAdapter.My
             if (mediaPlayer != null) {
                 if (null != mAudioPlayingHolder) {
                     if (previousPlayObject != null)
-                        mAudioPlayingHolder.tvTotalPlayTime.setText(Utils.parseTime(previousPlayObject.getLength()));
+                        mAudioPlayingHolder.tvPlayTime.setText(Utils.parseTime(previousPlayObject.getLength()));
                     updateNonPlayingView(mAudioPlayingHolder);
                 }
                 mediaPlayer.release();
@@ -192,14 +189,14 @@ public class AudioFilesAdapter extends RecyclerView.Adapter<AudioFilesAdapter.My
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder implements SeekBar.OnSeekBarChangeListener, View.OnClickListener {
-        TextView tvPlayTime, tvTotalPlayTime;
+        TextView tvPlayTime, tvFilePath;
         SeekBar audioSeekBar;
-        ImageButton imgPlayPause;
+        ImageView imgPlayPause;
 
         MyViewHolder(View view) {
             super(view);
             tvPlayTime = view.findViewById(R.id.tvPlaytime);
-            tvTotalPlayTime = view.findViewById(R.id.tvTotalPlayTime);
+            tvFilePath = view.findViewById(R.id.filePath);
             audioSeekBar = view.findViewById(R.id.seekBar);
             imgPlayPause = view.findViewById(R.id.imgPlay);
 
