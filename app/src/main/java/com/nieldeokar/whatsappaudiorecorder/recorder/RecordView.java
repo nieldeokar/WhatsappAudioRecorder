@@ -59,7 +59,7 @@ public class RecordView extends RelativeLayout {
     private int RECORD_FINISHED = R.raw.record_finished;
     private int RECORD_ERROR = 0 ;// R.raw.record_error;
     private MediaPlayer player;
-    private QTAudioRecording mQTAudioRecording;
+    private AudioRecording mAudioRecording;
     private File audioDirectory;
     private boolean isRecordingStarted = false;
 
@@ -127,7 +127,7 @@ public class RecordView extends RelativeLayout {
         }
 
         animatedVectorDrawable = AnimatedVectorDrawableCompat.create(context, R.drawable.basket_animated);
-        mQTAudioRecording = new QTAudioRecording();
+        mAudioRecording = new AudioRecording();
     }
 
 
@@ -355,7 +355,7 @@ public class RecordView extends RelativeLayout {
             @Override
             public void onComplete() {
                 startTime = System.currentTimeMillis();
-                mQTAudioRecording.startRecording();
+                mAudioRecording.startRecording();
             }
         });
 
@@ -529,8 +529,8 @@ public class RecordView extends RelativeLayout {
 
             String filePath = audioDirectory  + "/" + System.currentTimeMillis() + ".aac";
 
-            mQTAudioRecording.setOnAudioRecordListener(onRecordListener);
-            mQTAudioRecording.setFile(filePath);
+            mAudioRecording.setOnAudioRecordListener(onRecordListener);
+            mAudioRecording.setFile(filePath);
             Log.d("Record ", "start");
         }
     }
@@ -540,8 +540,8 @@ public class RecordView extends RelativeLayout {
     }
 
     public synchronized void stopRecord(final Boolean cancel) {
-        if (recordListener != null && mQTAudioRecording != null) {
-            mQTAudioRecording.stopRecording(cancel);
+        if (recordListener != null && mAudioRecording != null) {
+            mAudioRecording.stopRecording(cancel);
             isRecordingStarted = false;
 
             Log.d("Record ", "Cancel "+cancel);

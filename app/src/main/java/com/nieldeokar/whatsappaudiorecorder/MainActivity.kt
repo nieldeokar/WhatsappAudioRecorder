@@ -12,9 +12,9 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.nieldeokar.whatsappaudiorecorder.DividerItemDecoration.VERTICAL_LIST
+import com.nieldeokar.whatsappaudiorecorder.recorder.AudioRecording
 import com.nieldeokar.whatsappaudiorecorder.recorder.OnAudioRecordListener
 import com.nieldeokar.whatsappaudiorecorder.recorder.OnRecordClickListener
-import com.nieldeokar.whatsappaudiorecorder.recorder.QTAudioRecording
 import com.nieldeokar.whatsappaudiorecorder.recorder.RecordingItem
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.editor.*
@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity(), OnRecordClickListener, EditMessage.Key
 
             override fun onError(errorCode: Int) {
                 record_view.recordTimerStop()
-                if(errorCode == QTAudioRecording.FILE_NULL){
+                if(errorCode == AudioRecording.FILE_NULL){
                     runOnUiThread {
                         record_view.stopRecordingnResetViews(btn_send)
                         showToast("Destination filePath is null ")

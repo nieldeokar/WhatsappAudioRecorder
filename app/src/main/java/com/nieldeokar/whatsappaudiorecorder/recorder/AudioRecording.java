@@ -1,113 +1,119 @@
 package com.nieldeokar.whatsappaudiorecorder.recorder;
 
-import android.content.Context;
-import android.media.MediaPlayer;
-import android.media.MediaRecorder;
+import android.util.Log;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 
-/**
- * @author netodevel
- */
 public class AudioRecording {
 
-    private String mFileName;
-    private Context mContext;
-
-    private MediaPlayer mMediaPlayer;
+    private static final String TAG = "AudioRecording";
+    private File file;
     private OnAudioRecordListener onAudioRecordListener;
-    private MediaRecorder mRecorder;
     private long mStartingTimeMillis = 0;
-    private long mElapsedMillis = 0;
-    private File audioDirectory;
+    private static final int IO_ERROR = 1;
+    private static final int RECORDER_ERROR = 2;
+    public static final int FILE_NULL = 3;
 
-    public AudioRecording(Context context) {
-        this.mContext = context;
+    private Thread mRecordingThread;
+
+    AudioRecording() {
     }
 
-    AudioRecording(Context context, OnAudioRecordListener onAudioRecordListener) {
-        this.mContext = context;
+    public void setOnAudioRecordListener(OnAudioRecordListener onAudioRecordListener) {
         this.onAudioRecordListener = onAudioRecordListener;
     }
 
-    public AudioRecording() {
+    public void setFile(String filePath) {
+        this.file = new File(filePath);
     }
 
-    public AudioRecording setNameFile(String nameFile) {
-        this.mFileName = nameFile;
-        return this;
-    }
-
-    public synchronized AudioRecording start() {
-        mRecorder = new MediaRecorder();
-
-        mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-        mRecorder.setOutputFile(audioDirectory + mFileName);
-        mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-
-        try {
-            mRecorder.prepare();
-            mRecorder.start();
-            mStartingTimeMillis = System.currentTimeMillis();
-        } catch (Exception e) {
-            this.onAudioRecordListener.onError(1);
+    // Call this method from Activity onStartButton Click to start recording
+    public synchronized void startRecording() {
+        if(file == null) {
+            onAudioRecordListener.onError(FILE_NULL );
+            return;
         }
-        return this;
+        mStartingTimeMillis = System.currentTimeMillis();
+        try {
+            if(mRecordingThread != null) stopRecording(true);
+
+
+            mRecordingThread = new Thread(new AudioRecordThread(outputStream(file),new AudioRecordThread.OnRecorderFailedListener() {
+                @Override
+                public void onRecorderFailed() {
+                    onAudioRecordListener.onError(RECORDER_ERROR);
+                    stopRecording(true);
+                }
+
+                @Override
+                public void onRecorderStarted() {
+                    onAudioRecordListener.onRecordingStarted();
+                }
+            }));
+            mRecordingThread.setName("AudioRecordingThread");
+
+
+
+            mRecordingThread.start();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
-    public synchronized void stop(Boolean cancel) {
-        try {
-            if(mRecorder == null) return;
-            mRecorder.stop();
-            mRecorder.reset();
-            mRecorder.release();
-            mElapsedMillis = (System.currentTimeMillis() - mStartingTimeMillis);
-            mRecorder = null;
+    // Call this method from Activity onStopButton Click to stop recording
+    public synchronized void stopRecording(Boolean cancel){
+
+        Log.d(TAG, "Recording stopped ");
+
+        if(mRecordingThread != null){
+
+            mRecordingThread.interrupt();
+            mRecordingThread = null;
+
+
+            if (file.length() == 0L) {
+                onAudioRecordListener.onError(IO_ERROR);
+                return;
+            }
+
+            long mElapsedMillis = (System.currentTimeMillis() - mStartingTimeMillis);
 
             RecordingItem recordingItem = new RecordingItem();
-            recordingItem.setFilePath(audioDirectory + mFileName);
-            recordingItem.setName(mFileName);
+            recordingItem.setFilePath(file.getAbsolutePath());
+            recordingItem.setName(file.getName());
             recordingItem.setLength((int) mElapsedMillis);
             recordingItem.setTime(System.currentTimeMillis());
 
             if (!cancel) {
                 onAudioRecordListener.onRecordFinished(recordingItem);
             } else {
-                File file = new File(recordingItem.getFilePath());
-                if (file != null && file.exists()) file.delete();
+                deleteFile();
             }
-        }catch (Exception e){
-            e.printStackTrace();
         }
     }
 
-    public void play(RecordingItem recordingItem) {
+    private void deleteFile() {
+        if (file != null && file.exists())
+            Log.d(TAG, String.format("deleting file success %b ", file.delete()));
+    }
+
+    private OutputStream outputStream(File file) {
+        if (file == null) {
+            throw new RuntimeException("file is null !");
+        }
+        OutputStream outputStream;
         try {
-            this.mMediaPlayer = new MediaPlayer();
-            this.mMediaPlayer.setDataSource(recordingItem.getFilePath());
-            this.mMediaPlayer.prepare();
-            this.mMediaPlayer.start();
-
-        } catch (IOException e) {
-            e.printStackTrace();
+            outputStream = new FileOutputStream(file);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(
+                    "could not build OutputStream from" + " this file " + file.getName(), e);
         }
+        return outputStream;
     }
-
-    public void releaseResourse(){
-        try {
-            if(mRecorder == null) return;
-            mRecorder.reset();
-            mRecorder.release();
-            mRecorder = null;
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-
-    public void setAudioDirectory(File audioDirectory){
-        this.audioDirectory = audioDirectory;
-    }
-
 }
