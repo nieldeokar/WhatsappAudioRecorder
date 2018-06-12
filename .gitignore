@@ -15,12 +15,3 @@ gradle/
 gradlew
 gradlew.bat
 .idea/modules/
-developement/
-app/playStore/release/
-libsodium-jni-release/
-/qtconnect-playStore.jks
-/Unwanted.txt
-Unwanted.txt
-app/src/main/jni/opus/
-playStore/
-qtconnect-playStore.jks
