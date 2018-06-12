@@ -12,7 +12,7 @@ PCM data and we can compare the expected recorded bytes and recorded audio bytes
 [2]: https://developer.android.com/reference/android/media/AudioRecord
 [3]: https://github.com/3llomi/RecordView
 
-#### Pending work :
+## Pending work :
 1. On cancel Mic should fly up and then come down inside bucket.
 
 ## Preview
