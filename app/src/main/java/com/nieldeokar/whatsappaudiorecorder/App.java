@@ -1,12 +1,13 @@
 package com.nieldeokar.whatsappaudiorecorder;
 
 import android.app.Application;
+/**
+ * Created by nieldeokar on 11/06/18.
+ */
 
+class App : Application() {
 
-public class App extends Application {
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
+    override fun onCreate() {
+        super.onCreate()
     }
 }
