@@ -1,27 +1,27 @@
 package com.nieldeokar.whatsappaudiorecorder;
 
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeUnit
 
-public class Utils {
+object Utils {
 
-    public static String parseTime(long milliseconds) {
+    fun parseTime(milliseconds: Long): String {
 
-        if (TimeUnit.MILLISECONDS.toHours(milliseconds) == 0) {
+        if (TimeUnit.MILLISECONDS.toHours(milliseconds) == 0L) {
             // append only min and hours
-            String FORMAT = "%02d:%02d";
+            val FORMAT = "%02d:%02d"
             return String.format(FORMAT, TimeUnit.MILLISECONDS.toMinutes(milliseconds) - TimeUnit.HOURS.toMinutes(
                     TimeUnit.MILLISECONDS.toHours(milliseconds)),
                     TimeUnit.MILLISECONDS.toSeconds(milliseconds) - TimeUnit.MINUTES.toSeconds(
-                            TimeUnit.MILLISECONDS.toMinutes(milliseconds)));
+                            TimeUnit.MILLISECONDS.toMinutes(milliseconds)))
         } else {
-            String FORMAT = "%02d:%02d:%02d";
+            val FORMAT = "%02d:%02d:%02d"
 
             return String.format(FORMAT,
                     TimeUnit.MILLISECONDS.toHours(milliseconds),
                     TimeUnit.MILLISECONDS.toMinutes(milliseconds) - TimeUnit.HOURS.toMinutes(
                             TimeUnit.MILLISECONDS.toHours(milliseconds)),
                     TimeUnit.MILLISECONDS.toSeconds(milliseconds) - TimeUnit.MINUTES.toSeconds(
-                            TimeUnit.MILLISECONDS.toMinutes(milliseconds)));
+                            TimeUnit.MILLISECONDS.toMinutes(milliseconds)))
         }
     }
 }
