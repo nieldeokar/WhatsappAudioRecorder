@@ -1,81 +1,71 @@
 package com.nieldeokar.whatsappaudiorecorder;
 
-import android.content.Context;
-import android.os.Handler;
-import android.util.AttributeSet;
+import android.content.Context
+import android.os.Handler
+import android.util.AttributeSet
 
-public class EditMessage extends android.support.v7.widget.AppCompatEditText {
+class EditMessage : android.support.v7.widget.AppCompatEditText {
 
-    public static final int TYPING_TIMEOUT = 3000;
+    constructor(context: Context) : super(context) {}
 
-    protected static KeyboardListener keyboardListener;
-    protected static Handler mTypingHandler = new Handler();
-    private static boolean isUserTyping = false;
+    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {}
 
-    protected static Runnable mTypingTimeout = new Runnable() {
-        @Override
-        public void run() {
-            if (isUserTyping && keyboardListener != null) {
-                keyboardListener.onTypingStopped();
-                isUserTyping = false;
-            }
-        }
-    };
-
-    protected static Runnable mTypingResend = new Runnable() {
-        @Override
-        public void run() {
-            if (isUserTyping && keyboardListener != null) {
-                keyboardListener.onTypingStarted();
-            }
-        }
-    };
-
-    public EditMessage(Context context) {
-        super(context);
-    }
-
-    public EditMessage(Context context, AttributeSet attrs) {
-        super(context, attrs);
-    }
-
-    public EditMessage(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-    }
+    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {}
 
 
-    public void setKeyboardListener(KeyboardListener listener) {
-        keyboardListener = listener;
+    fun setKeyboardListener(listener: KeyboardListener?) {
+        keyboardListener = listener
         if (listener != null) {
-            isUserTyping = false;
+            isUserTyping = false
         }
     }
 
-    @Override
-    public void onTextChanged(CharSequence text, int start, int lengthBefore, int lengthAfter) {
-        super.onTextChanged(text, start, lengthBefore, lengthAfter);
+    public override fun onTextChanged(text: CharSequence, start: Int, lengthBefore: Int, lengthAfter: Int) {
+        super.onTextChanged(text, start, lengthBefore, lengthAfter)
 
         if (mTypingHandler != null && keyboardListener != null) {
-            mTypingHandler.removeCallbacks(mTypingTimeout);
-            mTypingHandler.postDelayed(mTypingTimeout, TYPING_TIMEOUT);
-            final int length = text.toString().length();
+            mTypingHandler!!.removeCallbacks(mTypingTimeout)
+            mTypingHandler!!.postDelayed(mTypingTimeout, TYPING_TIMEOUT.toLong())
+            val length = text.toString().length
             if (!isUserTyping && length > 0) {
-                isUserTyping = true;
-                keyboardListener.onTypingStarted();
-                mTypingHandler.postDelayed(mTypingResend, 5000);
+                isUserTyping = true
+                keyboardListener!!.onTypingStarted()
+                mTypingHandler!!.postDelayed(mTypingResend, 5000)
             } else if (isUserTyping && length == 0) {
-                isUserTyping = false;
-                keyboardListener.onTextDeleted();
+                isUserTyping = false
+                keyboardListener!!.onTextDeleted()
             }
         }
     }
 
-    public interface KeyboardListener {
+    interface KeyboardListener {
 
-        void onTypingStarted();
+        fun onTypingStarted()
 
-        void onTypingStopped();
+        fun onTypingStopped()
 
-        void onTextDeleted();
+        fun onTextDeleted()
+    }
+
+    companion object {
+
+        val TYPING_TIMEOUT = 3000
+
+        private var keyboardListener: KeyboardListener? = null
+        private var mTypingHandler: Handler? = Handler()
+        private var isUserTyping = false
+
+        protected var mTypingTimeout: Runnable = Runnable {
+            if (isUserTyping && keyboardListener != null) {
+                keyboardListener!!.onTypingStopped()
+                isUserTyping = false
+            }
+        }
+
+        protected var mTypingResend: Runnable = Runnable {
+            if (isUserTyping && keyboardListener != null) {
+                keyboardListener!!.onTypingStarted()
+            }
+        }
     }
 }
