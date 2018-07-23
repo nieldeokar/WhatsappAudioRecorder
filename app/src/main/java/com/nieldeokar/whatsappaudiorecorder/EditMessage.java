@@ -55,14 +55,14 @@ class EditMessage : android.support.v7.widget.AppCompatEditText {
         private var mTypingHandler: Handler? = Handler()
         private var isUserTyping = false
 
-        protected var mTypingTimeout: Runnable = Runnable {
+        private var mTypingTimeout: Runnable = Runnable {
             if (isUserTyping && keyboardListener != null) {
                 keyboardListener!!.onTypingStopped()
                 isUserTyping = false
             }
         }
 
-        protected var mTypingResend: Runnable = Runnable {
+        private var mTypingResend: Runnable = Runnable {
             if (isUserTyping && keyboardListener != null) {
                 keyboardListener!!.onTypingStarted()
             }
