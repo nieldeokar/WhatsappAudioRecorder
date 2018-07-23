@@ -49,7 +49,7 @@ class EditMessage : android.support.v7.widget.AppCompatEditText {
 
     companion object {
 
-        val TYPING_TIMEOUT = 3000
+        const val TYPING_TIMEOUT = 3000
 
         private var keyboardListener: KeyboardListener? = null
         private var mTypingHandler: Handler? = Handler()
