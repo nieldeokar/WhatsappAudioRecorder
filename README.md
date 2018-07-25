@@ -1,5 +1,5 @@
 # WhatsappAudioRecorder
-Simple audio recorder using Android's AudioRecorder with `.aac` File extention.
+Simple audio recorder using Android's AudioRecorder with `.aac` File extention. UI is same as Whatapp audio Recorder. Yet to add fly animation on bucket.
 
 
 
